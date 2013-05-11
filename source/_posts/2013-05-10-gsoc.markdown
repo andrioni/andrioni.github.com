@@ -1,0 +1,28 @@
+---
+layout: post
+title: "On the Google Summer of Code, FLINT and C"
+date: 2013-05-09 08:57
+comments: true
+categories: coding, gsoc
+---
+
+As it may be guessed from the title, this post will be about my application to [lmonade/FLINT](http://www.google-melange.com/gsoc/org/google/gsoc2013/lmonade) on this year's Google Summer of Code, but I promise I'll try to make it interesting to everyone ;)
+
+## The project: "A fast implementation of the LLL algorithm for FLINT"
+
+My submitted project was based on [a idea by Bill Hart](https://groups.google.com/d/msg/flint-devel/sFF3pnQKsQQ/h2iME1aR4qYJ), an implementation of the [LLL](http://en.wikipedia.org/wiki/LLL_algorithm) algorithm for [FLINT 2](http://www.flintlib.org/), which was an amazing idea to find, to be honest. The LLL algorithm is heavily used in lattice theory, one of the topics of research in my laboratory, and so I had a good contact with it before, though mostly from a theoretical standpoint, not an implementational one. I also was already interested in implementing the LLL algorithm, [though in Julia](https://groups.google.com/d/msg/julia-dev/mYCVcmM-dcQ/HB-1TueYv5cJ). When I saw the opportunity to do in C for FLINT during the Summer of Code, everything became easier: I now have the opportunity to work on this project while having a great mentor to help me and guide me, a mentor who is far more experienced with scientific computing and who's been writing amazingly efficient C code for years.
+
+### What is it about?
+
+The LLL algorithm nowadays is usually used in lattice basis reduction, to try to find a quasi-orthogonal basis for a lattice, but in this case our aim is a bit different: to use in polynomial factorizations, most specifically to lift a factorization of a polynomial over a finite field Z/pZ to a factorization over Z.
+
+### What is exactly going to be done?
+
+At first, the work will be on a sufficiently robust linear algebra for FLINT 2. FLINT 1.6 did have both the LLL algorithm and a small linear algebra support included, but it was sprawling and definitely not suitable for the much cleaner and modularized FLINT 2. My work will learn from it, but I do not plan on porting it or using its code directly, its sole use will be to understand the advanced techniques utilized there and to later test my work.
+
+In order to implement LLL, we need to have a basic linear algebra implementation, mostly vector operations (basic vector arithmetic, inner product, Gram-Schmidt orthogonalization, etc). My [coding sample](https://github.com/andrioni/flint-code-sample) (a QR implementation for double or arbitrary precision floating point numbers) shows most of the operations needed, as it shows a part of my C coding style (though of course not completely, as it was written without many time and planning), mostly inspired by [GMP](http://gmplib.org/) and [MPFR](http://www.mpfr.org/). I enjoy having clear interfaces, consistency the order of the arguments and their way of managing memory, and also strive to make the code efficient, readable and safe. To be able to accomplish those goals, I use [cppcheck](http://cppcheck.sourceforge.net/) for static code analysis and [Valgrind](http://valgrind.org/) for profiling.
+
+### Why the Google Summer of Code?
+
+Why apply to the Summer of Code and work hard for three months? Because it is *fun*! And by fun I mean that it is a wonderful experience, and not only because they pay well. Working on a free software project is a marvelous experience, because it makes you feel part of a community and makes you feel *useful*. [My project last year with Gambit](http://www.google-melange.com/gsoc/project/google/gsoc2012/andrioni/7001) was my first real contribution on a free software project, and it opened my eyes: you don't have to be a coding guru to contribute. You don't even have to be a professional programmer (I, for one, am an applied mathematics grad student!), though you do have to know how to code, usually. This first taste of being a *developer*, of being able to help other people, led me to want to know and to code more.
+I ended up being a somewhat occasional contributor to the [programming language Julia](http://julialang.org/), and I still maintain contact with my old mentor from Gambit and try to contribute whenever I can.
