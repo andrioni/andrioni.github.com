@@ -3,7 +3,7 @@ layout: post
 title: "On the Google Summer of Code, FLINT and C"
 date: 2013-05-09 08:57
 comments: true
-categories: coding, gsoc
+categories: [coding, gsoc]
 ---
 
 As it may be guessed from the title, this post will be about my application to [lmonade/FLINT](http://www.google-melange.com/gsoc/org/google/gsoc2013/lmonade) on this year's Google Summer of Code, but I promise I'll try to make it interesting to everyone ;)
