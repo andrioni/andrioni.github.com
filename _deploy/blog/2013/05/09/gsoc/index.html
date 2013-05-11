@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>On the Google Summer of Code, FLINT and C - (meta|mathe)matics</title>
+  <meta name="author" content="Alessandro Andrioni">
+
+  
+  <meta name="description" content="As it may be guessed from the title, this post will be about my application to lmonade/FLINT on this year&#8217;s Google Summer of Code, but I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrioni.github.com/blog/2013/05/09/gsoc/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="(meta|mathe)matics" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">(meta|mathe)matics</a></h1>
+  
+    <h2>mathematics, computer science and more, by Alessandro Andrioni</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrioni.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about-me">About Me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">On the Google Summer of Code, FLINT and C</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-09T08:57:00-03:00" pubdate data-updated="true">May 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>As it may be guessed from the title, this post will be about my application to <a href="http://www.google-melange.com/gsoc/org/google/gsoc2013/lmonade">lmonade/FLINT</a> on this year&#8217;s Google Summer of Code, but I promise I&#8217;ll try to make it interesting to everyone ;)</p>
+
+<h2>The project: &#8220;A fast implementation of the LLL algorithm for FLINT&#8221;</h2>
+
+<p>My submitted project was based on <a href="https://groups.google.com/d/msg/flint-devel/sFF3pnQKsQQ/h2iME1aR4qYJ">a idea by Bill Hart</a>, an implementation of the <a href="http://en.wikipedia.org/wiki/LLL_algorithm">LLL</a> algorithm for <a href="http://www.flintlib.org/">FLINT 2</a>, which was an amazing idea to find, to be honest. The LLL algorithm is heavily used in lattice theory, one of the topics of research in my laboratory, and so I had a good contact with it before, though mostly from a theoretical standpoint, not an implementational one. I also was already interested in implementing the LLL algorithm, <a href="https://groups.google.com/d/msg/julia-dev/mYCVcmM-dcQ/HB-1TueYv5cJ">though in Julia</a>. When I saw the opportunity to do in C for FLINT during the Summer of Code, everything became easier: I now have the opportunity to work on this project while having a great mentor to help me and guide me, a mentor who is far more experienced with scientific computing and who&#8217;s been writing amazingly efficient C code for years.</p>
+
+<h3>What is it about?</h3>
+
+<p>The LLL algorithm nowadays is usually used in lattice basis reduction, to try to find a quasi-orthogonal basis for a lattice, but in this case our aim is a bit different: to use in polynomial factorizations, most specifically to lift a factorization of a polynomial over a finite field Z/pZ to a factorization over Z.</p>
+
+<h3>What is exactly going to be done?</h3>
+
+<p>At first, the work will be on a sufficiently robust linear algebra for FLINT 2. FLINT 1.6 did have both the LLL algorithm and a small linear algebra support included, but it was sprawling and definitely not suitable for the much cleaner and modularized FLINT 2. My work will learn from it, but I do not plan on porting it or using its code directly, its sole use will be to understand the advanced techniques utilized there and to later test my work.</p>
+
+<p>In order to implement LLL, we need to have a basic linear algebra implementation, mostly vector operations (basic vector arithmetic, inner product, Gram-Schmidt orthogonalization, etc). My <a href="https://github.com/andrioni/flint-code-sample">coding sample</a> (a QR implementation for double or arbitrary precision floating point numbers) shows most of the operations needed, as it shows a part of my C coding style (though of course not completely, as it was written without many time and planning), mostly inspired by <a href="http://gmplib.org/">GMP</a> and <a href="http://www.mpfr.org/">MPFR</a>. I enjoy having clear interfaces, consistency the order of the arguments and their way of managing memory, and also strive to make the code efficient, readable and safe. To be able to accomplish those goals, I use <a href="http://cppcheck.sourceforge.net/">cppcheck</a> for static code analysis and <a href="http://valgrind.org/">Valgrind</a> for profiling.</p>
+
+<h3>Why the Google Summer of Code?</h3>
+
+<p>Why apply to the Summer of Code and work hard for three months? Because it is <em>fun</em>! And by fun I mean that it is a wonderful experience, and not only because they pay well. Working on a free software project is a marvelous experience, because it makes you feel part of a community and makes you feel <em>useful</em>. <a href="http://www.google-melange.com/gsoc/project/google/gsoc2012/andrioni/7001">My project last year with Gambit</a> was my first real contribution on a free software project, and it opened my eyes: you don&#8217;t have to be a coding guru to contribute. You don&#8217;t even have to be a professional programmer (I, for one, am an applied mathematics grad student!), though you do have to know how to code, usually. This first taste of being a <em>developer</em>, of being able to help other people, led me to want to know and to code more.
+I ended up being a somewhat occasional contributor to the <a href="http://julialang.org/">programming language Julia</a>, and I still maintain contact with my old mentor from Gambit and try to contribute whenever I can.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Alessandro Andrioni</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-09T08:57:00-03:00" pubdate data-updated="true">May 9<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/coding-/'>coding,</a>, <a class='category' href='/blog/categories/gsoc/'>gsoc</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrioni.github.com/blog/2013/05/09/gsoc/" data-via="" data-counturl="http://andrioni.github.com/blog/2013/05/09/gsoc/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/24/a-brand-new-start/" title="Previous Post: A brand new start">&laquo; A brand new start</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/09/gsoc/">On the Google Summer of Code, FLINT and C</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/24/a-brand-new-start/">A brand new start</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrioni">@andrioni</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrioni',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/107927209213631349657?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Alessandro Andrioni -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
