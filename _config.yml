@@ -3,7 +3,7 @@
 # ----------------------- #
 
 url: http://andrioni.github.com
-title: (meta|mathe)matics
+title: (meta|mathe) matics
 subtitle: mathematics, computer science and more, by Alessandro Andrioni
 author: Alessandro Andrioni
 simple_search: http://google.com/search
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: alessandroandrioni@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
