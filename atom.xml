@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[(meta|mathe)matics]]></title>
+  <title><![CDATA[(meta|mathe) matics]]></title>
   <link href="http://andrioni.github.com/atom.xml" rel="self"/>
   <link href="http://andrioni.github.com/"/>
-  <updated>2013-05-11T01:16:48-03:00</updated>
+  <updated>2013-05-12T05:41:27-03:00</updated>
   <id>http://andrioni.github.com/</id>
   <author>
     <name><![CDATA[Alessandro Andrioni]]></name>
-    
+    <email><![CDATA[alessandroandrioni@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
