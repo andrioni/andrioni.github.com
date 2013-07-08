@@ -1,0 +1,155 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>GSoC FLINT project accepted and the start of (heavily delayed, sorry!) blog posts - (meta|mathe) matics</title>
+	<meta name="author" content="Alessandro Andrioni">
+
+	
+	<meta name="description" content="GSoC FLINT Project Accepted and the Start of (Heavily Delayed, Sorry!) Blog Posts Hello! As the end of semester took much more time than I imagined &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="(meta|mathe) matics" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://andrioni.github.com/blog/2013/07/08/basic-linear-algebra-implemented-slash/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("alessandroandrioni@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h2><a href="/">(meta|mathe) matics</a></h2>
+<p class="subtitle">mathematics, computer science and more, by Alessandro Andrioni</p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/about-me">About Me</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/107927209213631349657" rel="author" title="Google+">Google+</a>
+		
+		
+		
+		<a class="github" href="https://github.com/andrioni" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">GSoC FLINT Project Accepted and the Start of (Heavily Delayed, Sorry!) Blog Posts</h1>
+	<div class="entry-content" itemprop="articleBody"><p>Hello! As the end of semester took much more time than I imagined, I ended up delaying writing posts about my progress on GSoC, though this will be hopefully corrected by a lot of updates in the following days discussing both the state of the work and the design decisions I took/shall have to take during the development of the library during this summer/winter.</p>
+
+<p>All forms of feedback and comments are both welcomed and encouraged!</p>
+
+<h2>Status</h2>
+
+<p>The code is currently available on <a href="https://github.com/andrioni/flint2/tree/d_mat">the <code>d_mat</code> branch of my flint2 fork on Github</a>. Most of the basic features for double-precision vectors and matrices is implemented already, though not yet optimized. There are also some tests written, but I&#8217;m not yet satisfied with their broadness, and this will probably lead to the implementation of more functions to generate random doubles. The existing code for MPFR-backed vectors was also extended, but most tests for it aren&#8217;t written yet.</p>
+
+<p>Documentation is currently mostly sketched and uncommitted, as I&#8217;m awaiting to stabilize a bit the planned API before finishing it.</p>
+
+<h2>List of issues faced so far</h2>
+
+<ul>
+<li>The function currently being used to generate doubles, <code>d_randtest</code>, generates numbers only between [0.5, 1), though Fredrik has already given orientation on how to generate other random doubles from that;</li>
+<li>No special care has been taken to deal with NaNs and infinities, though according to Bill this isn&#8217;t really important to most applications in number theory;</li>
+<li>The old <code>mpfr_vec</code> header was a bit confusing, as some functions were using <code>__mpfr_struct</code> instead of <code>mpfr</code> (which is just typedef&#8217;d to <code>__mpfr_struct</code> on <code>flint.h</code>, and is much more readable). I decided to standardize them on <code>mpfr</code> for clarity, and added the <code>const</code> keyword where it was possible;</li>
+<li>There is already <code>_mpfr_vec_scalar_product</code> function written, while I decided to name the double precision version <code>_d_vec_innerprod</code>, and it would be better to have one standard name. Both of them seem reasonable to me, and I strongly welcome any input on which one is better!</li>
+<li>It seems that the old code was written based on MPFR 2.4 (or older versions), and it seems to be the last version supported by MinGW (though MinGW-w64 supports 3.1). I&#8217;m currently trying to keep compatibility as much as I can, but it could be good to formally define which MPFR version flint requires;</li>
+<li>A related issue is the use of <code>GMP_RNDN</code> as the rounding mode constant used instead of <code>MPFR_RNDN</code> (available on 3.0 and above).</li>
+</ul>
+
+
+<h2>List of possible extra ideas for the following weeks</h2>
+
+<ul>
+<li>Using either/both the <a href="http://gcc.gnu.org/wiki/CompileFarm">GCC Compile Farm</a> or <a href="https://travis-ci.org/">Travis CI</a> to automatically run tests on different platforms and compilers;</li>
+<li>Writing something to track performance of the linear algebra functions to help benchmarking and to find more easily performance regressions.</li>
+</ul>
+
+
+<p>To work!</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2013 - Alessandro Andrioni -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>
