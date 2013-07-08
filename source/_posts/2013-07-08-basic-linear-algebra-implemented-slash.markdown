@@ -32,3 +32,5 @@ List of possible extra ideas for the following weeks
 
 - Using either/both the [GCC Compile Farm](http://gcc.gnu.org/wiki/CompileFarm) or [Travis CI](https://travis-ci.org/) to automatically run tests on different platforms and compilers;
 - Writing something to track performance of the linear algebra functions to help benchmarking and to find more easily performance regressions.
+
+To work!

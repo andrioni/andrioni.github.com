@@ -4,7 +4,7 @@
   <title><![CDATA[Category: gsoc | (meta|mathe) matics]]></title>
   <link href="http://andrioni.github.com/blog/categories/gsoc/atom.xml" rel="self"/>
   <link href="http://andrioni.github.com/"/>
-  <updated>2013-05-12T05:41:27-03:00</updated>
+  <updated>2013-07-08T01:42:35-03:00</updated>
   <id>http://andrioni.github.com/</id>
   <author>
     <name><![CDATA[Alessandro Andrioni]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[GSoC FLINT project accepted and the start of (heavily delayed, sorry!) blog posts]]></title>
+    <link href="http://andrioni.github.com/blog/2013/07/08/basic-linear-algebra-implemented-slash/"/>
+    <updated>2013-07-08T00:02:00-03:00</updated>
+    <id>http://andrioni.github.com/blog/2013/07/08/basic-linear-algebra-implemented-slash</id>
+    <content type="html"><![CDATA[<p>Hello! As the end of semester took much more time than I imagined, I ended up delaying writing posts about my progress on GSoC, though this will be hopefully corrected by a lot of updates in the following days discussing both the state of the work and the design decisions I took/shall have to take during the development of the library during this summer/winter.</p>
+
+<p>All forms of feedback and comments are both welcomed and encouraged!</p>
+
+<h2>Status</h2>
+
+<p>The code is currently available on <a href="https://github.com/andrioni/flint2/tree/d_mat">the <code>d_mat</code> branch of my flint2 fork on Github</a>. Most of the basic features for double-precision vectors and matrices is implemented already, though not yet optimized. There are also some tests written, but I'm not yet satisfied with their broadness, and this will probably lead to the implementation of more functions to generate random doubles. The existing code for MPFR-backed vectors was also extended, but most tests for it aren't written yet.</p>
+
+<p>Documentation is currently mostly sketched and uncommitted, as I'm awaiting to stabilize a bit the planned API before finishing it.</p>
+
+<h2>List of issues faced so far</h2>
+
+<ul>
+<li>The function currently being used to generate doubles, <code>d_randtest</code>, generates numbers only between [0.5, 1), though Fredrik has already given orientation on how to generate other random doubles from that;</li>
+<li>No special care has been taken to deal with NaNs and infinities, though according to Bill this isn't really important to most applications in number theory;</li>
+<li>The old <code>mpfr_vec</code> header was a bit confusing, as some functions were using <code>__mpfr_struct</code> instead of <code>mpfr</code> (which is just typedef'd to <code>__mpfr_struct</code> on <code>flint.h</code>, and is much more readable). I decided to standardize them on <code>mpfr</code> for clarity, and added the <code>const</code> keyword where it was possible;</li>
+<li>There is already <code>_mpfr_vec_scalar_product</code> function written, while I decided to name the double precision version <code>_d_vec_innerprod</code>, and it would be better to have one standard name. Both of them seem reasonable to me, and I strongly welcome any input on which one is better!</li>
+<li>It seems that the old code was written based on MPFR 2.4 (or older versions), and it seems to be the last version supported by MinGW (though MinGW-w64 supports 3.1). I'm currently trying to keep compatibility as much as I can, but it could be good to formally define which MPFR version flint requires;</li>
+<li>A related issue is the use of <code>GMP_RNDN</code> as the rounding mode constant used instead of <code>MPFR_RNDN</code> (available on 3.0 and above).</li>
+</ul>
+
+
+<h2>List of possible extra ideas for the following weeks</h2>
+
+<ul>
+<li>Using either/both the <a href="http://gcc.gnu.org/wiki/CompileFarm">GCC Compile Farm</a> or <a href="https://travis-ci.org/">Travis CI</a> to automatically run tests on different platforms and compilers;</li>
+<li>Writing something to track performance of the linear algebra functions to help benchmarking and to find more easily performance regressions.</li>
+</ul>
+
+
+<p>To work!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[On the Google Summer of Code, FLINT and C]]></title>
